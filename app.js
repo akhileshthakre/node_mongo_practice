@@ -6,6 +6,10 @@ const User = require('./model/user/users')
 const router = express.Router();
 const app = express()
 
+const cors = require('cors')
+
+app.use(cors())
+
 const uri = "mongodb+srv://akhilesh:akhilesh@rest.sa0z1.mongodb.net/?retryWrites=true&w=majority"
 
 mongoose.connect(uri, () => {
