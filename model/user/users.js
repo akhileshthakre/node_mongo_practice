@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
         max: 100,
         validate: {
             validator: v => v % 2 === 0,
-            message: props => `${props.value} is not an even number`
+            message: age  => `${age.value} is not an even number`
         }
     },
     email: {

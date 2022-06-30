@@ -1,17 +1,18 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const cors = require('cors')
 require('dotenv').config()
-const User = require('./model/user/users')
+const getUsers = require('./routes/users/getUsers')
+const createUser = require('./routes/users/createUser')
+const stripeRoutes = require('./routes/payments/stripe')
+const getMoveis = require('./routes/users/getJsonList')
 
-const router = express.Router();
+
 const app = express()
 
-const cors = require('cors')
-
-app.use(cors())
+const router = express.Router()
 
 const uri = "mongodb+srv://akhilesh:akhilesh@rest.sa0z1.mongodb.net/?retryWrites=true&w=majority"
-
 mongoose.connect(uri, () => {
     console.log("Connected")
 },
@@ -20,25 +21,14 @@ mongoose.connect(uri, () => {
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors())
 
-app.use("/routes",router);
+app.use("/api", getUsers);
+app.use("/api", createUser);
+app.use("/api/payment", stripeRoutes);
+app.use("/api", getMoveis)
 
-router.get('/',(req, res) => {
-    User.find().then((user) => {
-        res.send(user)
-    })
-})
-
-router.post('/user',(req,res) => {
-    try{
-        User.create(req.body)
-        res.sendStatus(200)
-    }catch {
-        (e => console.error(e.error)) 
-    }
-
-})
-
-app.listen(3000,() => {
+const PORT = process.env.PORT || 1337
+app.listen(PORT,() => {
     console.log("App running on port 3000")
 })
